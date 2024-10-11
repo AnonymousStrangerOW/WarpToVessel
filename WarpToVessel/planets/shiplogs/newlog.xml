@@ -1,0 +1,13 @@
+﻿<AstroObjectEntry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/Outer-Wilds-New-Horizons/new-horizons/main/NewHorizons/Schemas/shiplog_schema.xsd">
+	<ID>GIANTS_DEEP</ID>
+	<Entry>
+		<ID>GABBRONEW</ID>
+		<Name>New Meditation Technique</Name>
+		<IgnoreMoreToExplore/>
+
+		<ExploreFact>
+			<ID>GABBRONEW_E</ID>
+			<Text>Gabbro taught me a new meditation technique that will help me get to The Vessel much quicker.</Text>
+		</ExploreFact>
+	</Entry>
+</AstroObjectEntry>

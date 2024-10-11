@@ -1,0 +1,38 @@
+﻿<DialogueTree xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/Outer-Wilds-New-Horizons/new-horizons/main/NewHorizons/Schemas/dialogue_schema.xsd">
+	<DialogueNode>
+		<Name>GabbroMenu</Name>
+		<DialogueOptionsList>
+			<DialogueOption>
+				<RequiredLogCondition>TT_TIME_LOOP_DEVICE_X3</RequiredLogCondition>
+				<RequiredLogCondition>DB_VESSEL_X2</RequiredLogCondition>
+				<RequiredLogCondition>DB_VESSEL_X3</RequiredLogCondition>
+				<RequiredLogCondition>OPC_EYE_COORDINATES_X1</RequiredLogCondition>
+				<Text>I know how to get to the Eye of the Universe, but getting there is very annoying.</Text>
+				<DialogueTarget>WARP_VES_GABBRO</DialogueTarget>
+			</DialogueOption>
+		</DialogueOptionsList>
+	</DialogueNode>
+	<DialogueNode>
+		<Name>WARP_VES_GABBRO</Name>
+		<Dialogue>
+			<Page>Well you're in luck, time buddy! I've got just the thing for you!</Page>
+			<Page>If you've mastered meditation, you could practically let your body go on autopilot and it'll feel like an instant!</Page>
+			<Page>Thing is, you've got to restart the loop for the meditation to work.</Page>
+		</Dialogue>
+		<DialogueOptionsList>
+			<DialogueOption>
+				<Text>Ok Gabbro! Thanks!</Text>
+				<DialogueTarget>WARP_VES_GABBRO_2</DialogueTarget>
+			</DialogueOption>
+		</DialogueOptionsList>
+	</DialogueNode>
+	<DialogueNode>
+		<Name>WARP_VES_GABBRO_2</Name>
+		<Dialogue>
+			<Page>Any time, buddy! Good luck reaching The Eye!</Page>
+		</Dialogue>
+		<RevealFacts>
+			<FactID>GABBRONEW_E</FactID>
+		</RevealFacts>
+	</DialogueNode>
+</DialogueTree>
