@@ -2,9 +2,9 @@
   "$schema": "https://raw.githubusercontent.com/ow-mods/owml/master/schemas/manifest_schema.json",
   "filename": "WarpToVessel.dll",
   "author": "AnonymousStrangerOW",
-  "name": "WarpToVessel",
+  "name": "Warp To Vessel",
   "uniqueName": "AnonymousStrangerOW.WarpToVessel",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "owmlVersion": "2.11.1",
   "dependencies": ["xen.NewHorizons"]
 }

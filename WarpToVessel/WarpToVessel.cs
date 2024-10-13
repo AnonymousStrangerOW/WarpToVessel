@@ -28,9 +28,6 @@ namespace WarpToVessel
 
         private void Start()
         {
-            // Starting here, you'll have access to OWML's mod helper.
-            ModHelper.Console.WriteLine($"My mod {nameof(WarpToVessel)} is loaded!", MessageType.Success);
-
             // Get the New Horizons API and load configs
             newHorizons = ModHelper.Interaction.TryGetModApi<INewHorizons>("xen.NewHorizons");
             newHorizons.LoadConfigs(this);
@@ -39,7 +36,6 @@ namespace WarpToVessel
             LoadManager.OnCompleteSceneLoad += (scene, loadScene) =>
             {
                 if (loadScene != OWScene.SolarSystem) return;
-                ModHelper.Console.WriteLine("Loaded into solar system!", MessageType.Success);
             };
         }
 
@@ -60,10 +56,14 @@ namespace WarpToVessel
             controller.OnSocketableRemoved(item); // tells controller you removed the item
             Locator.GetToolModeSwapper().GetItemCarryTool().PickUpItemInstantly(item); // gives player the warp core
 
-            // vessel spawn stuff
-            ModHelper.Console.WriteLine("Silksong isn't real.", MessageType.Success);
-            vessel = SearchUtilities.Find("DB_VesselDimension_Body/Sector_VesselDimension/Spawn_Vessel").GetComponent<SpawnPoint>(); // gets vessel spawn point
+            // gives player suit if doesn't have one.
+            if (!Locator.GetPlayerSuit().IsWearingSuit())
+            {
+                Locator.GetPlayerSuit().SuitUp(false, true, true); // equip suit instantly
+            }
 
+            // vessel spawn stuff
+            vessel = SearchUtilities.Find("DB_VesselDimension_Body/Sector_VesselDimension/Spawn_Vessel").GetComponent<SpawnPoint>(); // gets vessel spawn point
             _spawner = GameObject.FindGameObjectWithTag("Player").GetRequiredComponent<PlayerSpawner>(); // gets player spawner
             _spawner.DebugWarp(vessel); // warps you to vessel
             
@@ -81,17 +81,20 @@ namespace WarpToVessel
         // adds button to pause and its function
         public override void SetupPauseMenu(IPauseMenuManager pauseMenu)
         {
-            ModHelper.Console.WriteLine("Setup Pause Menu is Running", MessageType.Success);
-            // checks if in solar system
-            if (LoadManager.GetCurrentScene() == OWScene.SolarSystem && Check())
+            // method to delay it to start after system is loaded
+            WarpToVessel.Instance.ModHelper.Events.Unity.FireInNUpdates(() =>
             {
-                base.SetupPauseMenu(pauseMenu); // sets up pause menu
-                var solarSystemButton = pauseMenu.MakeSimpleButton("MEDITATE TO VESSEL", 3, true); // adds button to pause menu
-                solarSystemButton.OnSubmitAction += () =>
+                // checks if in solar system
+                if (LoadManager.GetCurrentScene() == OWScene.SolarSystem)
                 {
-                    StartCoroutine(Blink()); // calls method to make player blink
-                };
-            }
+                    base.SetupPauseMenu(pauseMenu); // sets up pause menu
+                    var solarSystemButton = pauseMenu.MakeSimpleButton("MEDITATE TO VESSEL", 3, true); // adds button to pause menu
+                    solarSystemButton.OnSubmitAction += () =>
+                    {
+                        StartCoroutine(Blink()); // calls method to make player blink
+                    };
+                }
+            }, 5);
         }
 
         // harmony patch for gabbro
