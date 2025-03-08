@@ -6,6 +6,8 @@ using NewHorizons.Utility;
 using HarmonyLib;
 using System.Reflection;
 using System.IO;
+using UnityEngine.UI;
+using static StencilPreviewImageEffect;
 
 namespace WarpToVessel
 {
@@ -16,6 +18,8 @@ namespace WarpToVessel
         public SpawnPoint vessel; // to store the spawn point at the vessel
         public const float blinkTime = 0.5f; // constant for blink time
         public const float animTime = blinkTime / 2f; // constant for blink animation time
+        private SubmitAction warpButton;
+        private bool isInShip; // boolean value to store if the player entered the ship or not
         public static WarpToVessel Instance; // to store the instance of the mod
         public static INewHorizons newHorizons { get; private set; } // to store nh api
 
@@ -37,6 +41,32 @@ namespace WarpToVessel
             {
                 if (loadScene != OWScene.SolarSystem) return;
             };
+        }
+
+        private void Update()
+        {
+            if (warpButton != null)
+            {
+                if (Check())
+                {
+                    warpButton.gameObject.SetActive(true);
+                    
+                    if (Locator.GetPlayerSectorDetector().IsWithinSector(Sector.Name.Ship))
+                    {
+                        warpButton.enabled = false;
+                        isInShip = true;
+                    } else
+                    {
+                        warpButton.enabled = true;
+                        isInShip = false;
+                    }
+                    warpButton.gameObject.GetComponent<UIStyleApplier>().ChangeState(isInShip ? UIElementState.DISABLED : UIElementState.NORMAL, false);
+                }
+                else
+                {
+                    warpButton.gameObject.SetActive(false);
+                }
+            }
         }
 
         // blink coroutine method
@@ -75,7 +105,7 @@ namespace WarpToVessel
         
         private bool Check()
         {
-            return Locator.GetShipLogManager().IsFactRevealed("GABBRONEW_E");
+            return Locator.GetShipLogManager().IsFactRevealed("GABBRONEW_E"); // checks if the player talked to gabbro about the new trick.
         }
 
         // adds button to pause and its function
@@ -85,11 +115,11 @@ namespace WarpToVessel
             WarpToVessel.Instance.ModHelper.Events.Unity.FireInNUpdates(() =>
             {
                 // checks if in solar system
-                if (LoadManager.GetCurrentScene() == OWScene.SolarSystem)
+                if (LoadManager.GetCurrentScene() == OWScene.SolarSystem && Check())
                 {
                     base.SetupPauseMenu(pauseMenu); // sets up pause menu
-                    var solarSystemButton = pauseMenu.MakeSimpleButton("MEDITATE TO VESSEL", 3, true); // adds button to pause menu
-                    solarSystemButton.OnSubmitAction += () =>
+                    warpButton = pauseMenu.MakeSimpleButton("MEDITATE TO VESSEL", 3, true); // adds button to pause menu
+                    warpButton.OnSubmitAction += () =>
                     {
                         StartCoroutine(Blink()); // calls method to make player blink
                     };
@@ -97,7 +127,7 @@ namespace WarpToVessel
             }, 5);
         }
 
-        // harmony patch for gabbro
+        // harmony patch for gabbro dialogue
         [HarmonyPatch]
         public class Patch
         {
