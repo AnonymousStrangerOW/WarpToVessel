@@ -4,7 +4,7 @@
   "author": "AnonymousStrangerOW",
   "name": "Warp To Vessel",
   "uniqueName": "AnonymousStrangerOW.WarpToVessel",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "owmlVersion": "2.11.1",
   "dependencies": ["xen.NewHorizons"]
 }
