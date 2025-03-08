@@ -5,6 +5,6 @@
   "name": "Warp To Vessel",
   "uniqueName": "AnonymousStrangerOW.WarpToVessel",
   "version": "1.1.0",
-  "owmlVersion": "2.11.1",
-  "dependencies": ["xen.NewHorizons"]
+  "owmlVersion": "2.15.1",
+  "dependencies": [ "xen.NewHorizons" ]
 }
